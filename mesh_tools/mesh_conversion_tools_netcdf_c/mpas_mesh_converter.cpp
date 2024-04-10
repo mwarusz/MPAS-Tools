@@ -1835,8 +1835,31 @@ int buildAreas(){/*{{{*/
                 }
 
                 cell_loc = cells.at(iCell);
-                edge_loc1 = edges.at(edge1);
-                edge_loc2 = edges.at(edge2);
+                const bool original_weights = false;
+                if (original_weights) {
+                  edge_loc1 = edges.at(edge1);
+                  edge_loc2 = edges.at(edge2);
+                } else {
+                  // calculate midpoints of cell edges
+
+                  // edge1
+                  pnt edge1_vertex1 = vertices.at(verticesOnEdge.at(edge1).at(0));
+                  pnt edge1_vertex2 = vertices.at(verticesOnEdge.at(edge1).at(1));
+                  pnt edge1_mid = (edge1_vertex1 + edge1_vertex2) / 2;
+                  if (spherical) {
+                    edge1_mid.normalize();
+                  }
+                  edge_loc1 = edge1_mid;
+
+                  // edge2
+                  pnt edge2_vertex1 = vertices.at(verticesOnEdge.at(edge2).at(0));
+                  pnt edge2_vertex2 = vertices.at(verticesOnEdge.at(edge2).at(1));
+                  pnt edge2_mid = (edge2_vertex1 + edge2_vertex2) / 2;
+                  if (spherical) {
+                    edge2_mid.normalize();
+                  }
+                  edge_loc2 = edge2_mid;
+                }
 
                 if(!spherical){
                     cell_loc.fixPeriodicity(vertices.at(iVertex), xPeriodicFix, yPeriodicFix);
